@@ -27,11 +27,12 @@ int render(const int width, const int height, const int samples) {
 
 	Color *image = new Color[width * height];
 
+	// OpenMP
 //#pragma omp parallel for schedule(dynamic, 1) num_threads(7)
 	for (int y = 0; y < height; y ++) {
 		std::cerr << "Rendering (" << samples * 4 << " spp) " << (100.0 * y / (height - 1)) << "%" << std::endl;
 
-		Random rnd(y);
+		Random rnd(y + 1);
 		for (int x = 0; x < width; x ++) {
 			const int image_index = (height - y - 1) * width + x;
 			// 2x2のサブピクセルサンプリング
