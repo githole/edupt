@@ -4,44 +4,47 @@
 namespace edupt {
 
 struct Vec {
-	double x, y, z;
-	Vec(const double x_ = 0, const double y_ = 0, const double z_ = 0) : x(x_), y(y_), z(z_) {}
+	double x_, y_, z_;
+	     Vec(const double x = 0, const double y = 0, const double z = 0) : x_(x), y_(y), z_(z) {}
 	inline Vec operator+(const Vec &b) const {
-		return Vec(x + b.x, y + b.y, z + b.z);
+		return Vec(x_ + b.x_, y_ + b.y_, z_ + b.z_);
 	}
 	inline Vec operator-(const Vec &b) const {
-		return Vec(x - b.x, y - b.y, z - b.z);
+		return Vec(x_ - b.x_, y_ - b.y_, z_ - b.z_);
 	}
 	inline Vec operator*(const double b) const {
-		return Vec(x * b, y * b, z * b);
+		return Vec(x_ * b, y_ * b, z_ * b);
 	}
 	inline Vec operator/(const double b) const {
-		return Vec(x / b, y / b, z / b);
+		return Vec(x_ / b, y_ / b, z_ / b);
 	}
 	inline Vec operator-() {
-		return Vec(-x, -y, -z);
+		return Vec(-x_, -y_, -z_);
 	}
-	inline const double LengthSquared() const { 
-		return x*x + y*y + z*z; 
+	inline const double length_squared() const { 
+		return x_*x_ + y_*y_ + z_*z_; 
 	}
-	inline const double Length() const { 
-		return sqrt(LengthSquared()); 
+	inline const double length() const { 
+		return sqrt(length_squared()); 
 	}
 };
 inline Vec operator*(double f, const Vec &v) { 
 	return v * f; 
 }
 inline Vec normalize(const Vec &v) {
-	return v / v.Length(); 
+	return v * (1.0 / v.length()); 
 }
 inline const Vec multiply(const Vec &v1, const Vec &v2) {
-	return Vec(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+	return Vec(v1.x_ * v2.x_, v1.y_ * v2.y_, v1.z_ * v2.z_);
 }
 inline const double dot(const Vec &v1, const Vec &v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return v1.x_ * v2.x_ + v1.y_ * v2.y_ + v1.z_ * v2.z_;
 }
 inline const Vec cross(const Vec &v1, const Vec &v2) {
-	return Vec((v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x * v2.z), (v1.x * v2.y) - (v1.y * v2.x));
+	return Vec(
+		(v1.y_ * v2.z_) - (v1.z_ * v2.y_),
+		(v1.z_ * v2.x_) - (v1.x_ * v2.z_),
+		(v1.x_ * v2.y_) - (v1.y_ * v2.x_));
 }
 
 };

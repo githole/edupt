@@ -7,18 +7,18 @@
 namespace edupt {
 
 struct Hitpoint {
-	double t;
-	Vec normal;
-	Vec position;
+	double distance_;
+	Vec normal_;
+	Vec position_;
 
-	Hitpoint() : t(0.0), normal(), position() {}
+	Hitpoint() : distance_(kINF), normal_(), position_() {}
 };
 
 struct Intersection {
-	Hitpoint hitpoint;
-	int object_id;
+	Hitpoint hitpoint_;
+	int object_id_;
 
-	Intersection() : object_id(-1) {}
+	Intersection() : object_id_(-1) {}
 };
 
 };

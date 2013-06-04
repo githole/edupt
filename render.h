@@ -1,4 +1,4 @@
-#ifndef _RENDER_H_
+﻿#ifndef _RENDER_H_
 #define _RENDER_H_
 
 #include <iostream>
@@ -27,25 +27,27 @@ int render(const int width, const int height, const int samples) {
 
 	Color *image = new Color[width * height];
 
-#pragma omp parallel for schedule(dynamic, 1) num_threads(10)
+//#pragma omp parallel for schedule(dynamic, 1) num_threads(7)
 	for (int y = 0; y < height; y ++) {
 		std::cerr << "Rendering (" << samples * 4 << " spp) " << (100.0 * y / (height - 1)) << "%" << std::endl;
 
 		Random rnd(y);
 		for (int x = 0; x < width; x ++) {
-			int image_index = (height - y - 1) * width + x;	
-			image[image_index] = Color();
-
+			const int image_index = (height - y - 1) * width + x;
 			// 2x2のサブピクセルサンプリング
 			for (int sy = 0; sy < 2; sy ++) {
 				for (int sx = 0; sx < 2; sx ++) {
 					Color accumulated_radiance = Color();
 					// 一つのサブピクセルあたりsamples回サンプリングする
 					for (int s = 0; s < samples; s ++) {
-						const double r1 = sx * 0.5;
-						const double r2 = sy * 0.5;
+						const double r1 = sx * 0.5 + 0.25;
+						const double r2 = sy * 0.5 + 0.25;
 						// スクリーン上の位置
-						const Vec screen_position = screen_x * ((r1 + x) / width - 0.5) + screen_y * ((r2 + y) / height- 0.5) + screen_center;
+						const Vec screen_position = 
+							screen_center + 
+							screen_x * ((r1 + x) / width - 0.5) +
+							screen_y * ((r2 + y) / height- 0.5);
+						// レイを飛ばす方向
 						const Vec dir = normalize(screen_position - camera_position);
 
 						accumulated_radiance = accumulated_radiance + 
