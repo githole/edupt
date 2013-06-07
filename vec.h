@@ -1,6 +1,8 @@
 #ifndef	_VEC_H_
 #define	_VEC_H_
 
+#include <cmath>
+
 namespace edupt {
 
 struct Vec {

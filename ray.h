@@ -12,4 +12,4 @@ struct Ray {
 
 };
 
-#endif _RAY_H_
+#endif

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <cstdio>
 #include <vector>
 
 #include "material.h"
