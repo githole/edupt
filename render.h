@@ -30,7 +30,7 @@ int render(const int width, const int height, const int samples, const int subsa
 	std::cout << width << "x" << height << " " << samples * (subsamples * subsamples) << " spp" << std::endl;
 
 	// OpenMP
-#pragma omp parallel for schedule(dynamic, 1) num_threads(6)
+//#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
 	for (int y = 0; y < height; y ++) {
 		std::cerr << "Rendering (y = " << y << ") " << (100.0 * y / (height - 1)) << "%" << std::endl;
 
