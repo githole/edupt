@@ -13,7 +13,7 @@ namespace edupt {
 
 const Color BackgroundColor = Color(0.0, 0.0, 0.0);
 const int Depth = 5; // ロシアンルーレットで打ち切らない最大深度
-const int DpethLimit = 64; // 探索深度限界
+const int DpethLimit = 64;
 
 // ray方向からの放射輝度を求める
 Color radiance(const Ray &ray, Random *rnd, const int depth) {
@@ -29,12 +29,12 @@ Color radiance(const Ray &ray, Random *rnd, const int depth) {
 	// ロシアンルーレットの閾値は任意だが色の反射率等を使うとより良い。
 	double russian_roulette_probability = std::max(now_object.color_.x_, std::max(now_object.color_.y_, now_object.color_.z_));
 
-	// 反射回数が一定以上になったらロシアンルーレットの確率を急上昇させる。
+	// 反射回数が一定以上になったらロシアンルーレットの確率を急上昇させる。（スタックオーバーフロー対策）
 	if (depth > DpethLimit)
 		russian_roulette_probability *= pow(0.5, depth - DpethLimit);
 
-	// ロシアンルーレットを実行し追跡を打ち切るかどうかを判断する
-	// ただしDepth回の追跡は保障する
+	// ロシアンルーレットを実行し追跡を打ち切るかどうかを判断する。
+	// ただしDepth回の追跡は保障する。
 	if (depth > Depth) {
 		if (rnd->next01() >= russian_roulette_probability)
 			return now_object.emission_;
@@ -93,12 +93,12 @@ Color radiance(const Ray &ray, Random *rnd, const int depth) {
 		const double ddn = dot(ray.dir_, orienting_normal);
 		const double cos2t = 1.0 - nnt * nnt * (1.0 - ddn * ddn);
 		
-		if (cos2t < 0.0) { // 全反射した
+		if (cos2t < 0.0) { // 全反射
 			incoming_radiance = radiance(reflection_ray, rnd, depth+1);
 			weight = now_object.color_ / russian_roulette_probability;
 			break;
 		}
-		// 屈折していく方向
+		// 屈折の方向
 		const Ray refraction_ray = Ray(hitpoint.position_,
 			normalize(ray.dir_ * nnt - hitpoint.normal_ * (into ? 1.0 : -1.0) * (ddn * nnt + sqrt(cos2t))));
 
@@ -107,7 +107,7 @@ Color radiance(const Ray &ray, Random *rnd, const int depth) {
 		const double R0 = (a * a) / (b * b);
 		const double c = 1.0 - (into ? -ddn : dot(refraction_ray.dir_, hitpoint.normal_));
 		const double Re = R0 + (1.0 - R0) * pow(c, 5.0);
-		const double nnt2 = pow(into ? nc / nt : nt / nc, 2.0); // レイの運ぶ放射輝度は屈折率の異なる物体間を移動するとき、屈折率の比の二乗の分だけ変化する
+		const double nnt2 = pow(into ? nc / nt : nt / nc, 2.0); // レイの運ぶ放射輝度は屈折率の異なる物体間を移動するとき、屈折率の比の二乗の分だけ変化する。
 		const double Tr = nnt2 * (1.0 - Re); // 屈折光の運ぶ光の量
 		const double probability  = 0.25 + 0.5 * Re;
 
