@@ -1,4 +1,4 @@
-﻿#ifndef _RENDER_H_
+#ifndef _RENDER_H_
 #define _RENDER_H_
 
 #include <iostream>
@@ -9,7 +9,7 @@
 
 namespace edupt {
 
-int render(const int width, const int height, const int samples, const int subsamples) {
+int render(const int width, const int height, const int samples, const int supersamples) {
 	// カメラ位置
 	const Vec camera_position = Vec(50.0, 52.0, 220.0);
 	const Vec camera_dir      = normalize(Vec(0.0, -0.04, -1.0));
@@ -27,7 +27,7 @@ int render(const int width, const int height, const int samples, const int subsa
 
 	Color *image = new Color[width * height];
 
-	std::cout << width << "x" << height << " " << samples * (subsamples * subsamples) << " spp" << std::endl;
+	std::cout << width << "x" << height << " " << samples * (supersamples * supersamples) << " spp" << std::endl;
 
 	// OpenMP
 //#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
@@ -37,13 +37,13 @@ int render(const int width, const int height, const int samples, const int subsa
 		Random rnd(y + 1);
 		for (int x = 0; x < width; x ++) {
 			const int image_index = (height - y - 1) * width + x;
-			// 2x2のサブピクセルサンプリング
-			for (int sy = 0; sy < subsamples; sy ++) {
-				for (int sx = 0; sx < subsamples; sx ++) {
+			// supersamples x supersamples のスーパーサンプリング
+			for (int sy = 0; sy < supersamples; sy ++) {
+				for (int sx = 0; sx < supersamples; sx ++) {
 					Color accumulated_radiance = Color();
 					// 一つのサブピクセルあたりsamples回サンプリングする
 					for (int s = 0; s < samples; s ++) {
-						const double rate = (1.0 / subsamples);
+						const double rate = (1.0 / supersamples);
 						const double r1 = sx * rate + rate / 2.0;
 						const double r2 = sy * rate + rate / 2.0;
 						// スクリーン上の位置
@@ -55,7 +55,7 @@ int render(const int width, const int height, const int samples, const int subsa
 						const Vec dir = normalize(screen_position - camera_position);
 
 						accumulated_radiance = accumulated_radiance + 
-							radiance(Ray(camera_position, dir), &rnd, 0) / samples / (subsamples * subsamples);
+							radiance(Ray(camera_position, dir), &rnd, 0) / samples / (supersamples * supersamples);
 					}
 					image[image_index] = image[image_index] + accumulated_radiance;
 				}
