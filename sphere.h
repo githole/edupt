@@ -1,4 +1,4 @@
-﻿#ifndef	_SPHERE_H_
+#ifndef	_SPHERE_H_
 #define	_SPHERE_H_
 
 #include <cmath>
@@ -24,15 +24,15 @@ struct Sphere {
 	// 入力のrayに対する交差点までの距離を返す。交差しなかったら0を返す。
 	// rayとの交差判定を行う。交差したらtrue,さもなくばfalseを返す。
 	bool intersect(const Ray &ray, Hitpoint *hitpoint) const {
-		const Vec o_p = position_ - ray.org_;
-		const double b = dot(o_p, ray.dir_);
-		const double det = b * b - dot(o_p, o_p) + radius_ * radius_;
+		const Vec p_o = position_ - ray.org_;
+		const double b = dot(p_o, ray.dir_);
+		const double D4 = b * b - dot(p_o, p_o) + radius_ * radius_;
 
-		if (det < 0.0)
+		if (D4 < 0.0)
 			return false;
 		
-		const double sqrt_det = sqrt(det);
-		const double t1 = b - sqrt_det, t2 = b + sqrt_det;
+		const double sqrt_D4 = sqrt(D4);
+		const double t1 = b - sqrt_D4, t2 = b + sqrt_D4;
 	
 		if (t1 < kEPS && t2 < kEPS)
 			return false;
