@@ -20,9 +20,6 @@ struct Vec {
 	inline Vec operator/(const double b) const {
 		return Vec(x_ / b, y_ / b, z_ / b);
 	}
-	inline Vec operator-() {
-		return Vec(-x_, -y_, -z_);
-	}
 	inline const double length_squared() const { 
 		return x_*x_ + y_*y_ + z_*z_; 
 	}
