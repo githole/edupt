@@ -107,12 +107,9 @@ Color radiance(const Ray &ray, Random *rnd, const int depth) {
 		const double R0 = (a * a) / (b * b);
 
 		const double c = 1.0 - (into ? -ddn : dot(refraction_ray.dir_, -1.0 * orienting_normal));
-		const double Re = R0 + (1.0 - R0) * pow(c, 5.0); // 反射方向の光が反射してray.dirの方向に運ぶ割合
-
-		const double ct = 1.0 - (into ? dot(refraction_ray.dir_, -1.0 * orienting_normal) : -ddn);
-		const double Ret = R0 + (1.0 - R0) * pow(ct, 5.0); // 屈折方向の光が反射する方向に運ぶ割合
+		const double Re = R0 + (1.0 - R0) * pow(c, 5.0); // 反射方向の光が反射してray.dirの方向に運ぶ割合。同時に屈折方向の光が反射する方向に運ぶ割合。
 		const double nnt2 = pow(into ? nc / nt : nt / nc, 2.0); // レイの運ぶ放射輝度は屈折率の異なる物体間を移動するとき、屈折率の比の二乗の分だけ変化する。
-		const double Tr = (1.0 - Ret) * nnt2; // 屈折方向の光が屈折してray.dirの方向に運ぶ割合
+		const double Tr = (1.0 - Re) * nnt2; // 屈折方向の光が屈折してray.dirの方向に運ぶ割合
 		
 		// 一定以上レイを追跡したら屈折と反射のどちらか一方を追跡する。（さもないと指数的にレイが増える）
 		// ロシアンルーレットで決定する。
