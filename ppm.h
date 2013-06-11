@@ -27,6 +27,7 @@ void save_ppm_file(const std::string &filename, const Color *image, const int wi
 	fprintf(f, "P3\n%d %d\n%d\n", width, height, 255);
 	for (int i = 0; i < width * height; i++)
 		fprintf(f,"%d %d %d ", to_int(image[i].x_), to_int(image[i].y_), to_int(image[i].z_));
+	fclose(f);
 }
 
 
