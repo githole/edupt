@@ -26,21 +26,21 @@ inline bool intersect_scene(const Ray &ray, Intersection *intersection) {
 	const double n = sizeof(spheres) / sizeof(Sphere);
 
 	// 初期化
-	intersection->hitpoint_.distance_ = kINF;
-	intersection->object_id_  = -1;
+	intersection->hitpoint.distance = kINF;
+	intersection->object_id  = -1;
 	
 	// 線形探索
 	for (int i = 0; i < int(n); i ++) {
 		Hitpoint hitpoint;
 		if (spheres[i].intersect(ray, &hitpoint)) {
-			if (hitpoint.distance_ < intersection->hitpoint_.distance_) {
-				intersection->hitpoint_ = hitpoint;
-				intersection->object_id_ = i;
+			if (hitpoint.distance < intersection->hitpoint.distance) {
+				intersection->hitpoint = hitpoint;
+				intersection->object_id = i;
 			}
 		}
 	}
 
-	return (intersection->object_id_ != -1);
+	return (intersection->object_id != -1);
 }
 
 };

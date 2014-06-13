@@ -1,4 +1,4 @@
-#ifndef _RENDER_H_
+﻿#ifndef _RENDER_H_
 #define _RENDER_H_
 
 #include <iostream>
@@ -30,7 +30,7 @@ int render(const int width, const int height, const int samples, const int super
 	std::cout << width << "x" << height << " " << samples * (supersamples * supersamples) << " spp" << std::endl;
 
 	// OpenMP
-//#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
+// #pragma omp parallel for schedule(dynamic, 1) num_threads(4)
 	for (int y = 0; y < height; y ++) {
 		std::cerr << "Rendering (y = " << y << ") " << (100.0 * y / (height - 1)) << "%" << std::endl;
 

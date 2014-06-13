@@ -6,8 +6,8 @@
 namespace edupt {
 
 struct Ray {
-	Vec org_, dir_;
-	Ray(const Vec &org, const Vec &dir) : org_(org), dir_(dir) {}
+	Vec org, dir;
+	Ray(const Vec &org, const Vec &dir) : org(org), dir(dir) {}
 };
 
 };
