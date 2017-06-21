@@ -13,7 +13,7 @@ namespace edupt {
 
 const Color kBackgroundColor = Color(0.0, 0.0, 0.0);
 const int kDepth = 5; // ロシアンルーレットで打ち切らない最大深度
-const int kDpethLimit = 64;
+const int kDepthLimit = 64;
 
 // ray方向からの放射輝度を求める
 Color radiance(const Ray &ray, Random *rnd, const int depth) {
@@ -30,8 +30,8 @@ Color radiance(const Ray &ray, Random *rnd, const int depth) {
 	double russian_roulette_probability = std::max(now_object.color.x, std::max(now_object.color.y, now_object.color.z));
 
 	// 反射回数が一定以上になったらロシアンルーレットの確率を急上昇させる。（スタックオーバーフロー対策）
-	if (depth > kDpethLimit)
-		russian_roulette_probability *= pow(0.5, depth - kDpethLimit);
+	if (depth > kDepthLimit)
+		russian_roulette_probability *= pow(0.5, depth - kDepthLimit);
 
 	// ロシアンルーレットを実行し追跡を打ち切るかどうかを判断する。
 	// ただしDepth回の追跡は保障する。
